@@ -1,0 +1,11 @@
+===== Baseline Model: TEST CER =====
+`loss_type=None` was set in the config but it is unrecognized. Using the default loss: `ForCausalLMLoss`.
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 315/315 [04:45<00:00,  1.10it/s]
+Test CER = 0.5942239072256913
+
+
+
+===== Fine Tuned Model: TEST CER =====
+`loss_type=None` was set in the config but it is unrecognized. Using the default loss: `ForCausalLMLoss`.
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 315/315 [02:15<00:00,  2.33it/s]
+Test CER: 0.3444097531965507
