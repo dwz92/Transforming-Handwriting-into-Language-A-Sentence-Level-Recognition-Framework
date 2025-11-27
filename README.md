@@ -18,7 +18,18 @@ It includes:
 2. Unzip the downloaded file.
 
 3. Move the folder named **`input`** into the **`413-Final`** directory so the structure looks like:
-413-Final/ ├── input/ │ ├── train/ │ ├── test/ │ └── metadata.csv ├── train_model.py ├── run_saved_model.py ├── run_baseline_model.py ├── organize_notes.py └── eval_similarity.py
+```
+413-Final/
+├── input/
+│ ├── train/
+│ ├── test/
+│ └── metadata.csv
+├── train_model.py
+├── run_saved_model.py
+├── run_baseline_model.py
+├── organize_notes.py
+└── eval_similarity.py
+```
    
 ## Environment Setup
 
