@@ -104,3 +104,15 @@ This script computes **semantic similarity** between the organized ground-truth 
 Using the SentenceTransformer model **all-mpnet-base-v2**, it embeds each paragraph and computes cosine similarity for each note.  
 It reports both **per-note similarity** and **overall averages**, enabling a direct comparison of semantic accuracy between models and quantifying how much improvement fine-tuning provides.
 
+
+### Character Error Rate (CER)
+
+Character Error Rate (CER) measures how accurately the model transcribes each cropped word image from the GNHK dataset.  
+For every cropped image, the model predicts a word, and CER compares this prediction to its ground-truth label by counting **character substitutions, insertions, and deletions**, normalized by the length of the true word.
+
+A perfect match gives **CER = 0**, while more mistakes increase the score.
+
+During fine-tuning, validation, and testing, CER reflects how close each predicted word is to its corresponding target word.  
+It is also used to compare the performance of the pretrained baseline TrOCR model with the fine-tuned version.
+
+
