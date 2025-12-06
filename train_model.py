@@ -56,9 +56,9 @@ class ValidationLoggerCallback(TrainerCallback):
 
 @dataclass(frozen=True)
 class TrainingConfig:
-    BATCH_SIZE: int = 24 # Remember to adjust this batch size
-    EPOCHS: int = 1
-    LEARNING_RATE: float = 5e-5
+    BATCH_SIZE: int = 24  # Final batch size
+    EPOCHS: int = 3       # Match E2: 3 epochs
+    LEARNING_RATE: float = 5e-5  # Match E2: lr = 5e-5
 
 
 @dataclass(frozen=True)
@@ -248,8 +248,8 @@ def main():
     model.to(device)
 
     # ======== FREEZE EARLY ENCODER LAYERS ========
-    print("total number of blocks we have", len(model.encoder.encoder.layer)) # total number of blocks we have
-    # Freeze first 3 transformer blocks (for TrOCR small: blocks 0–2)
+    print("total number of blocks we have", len(model.encoder.encoder.layer))  # total number of blocks we have
+    # Match E2: freeze first 2 transformer blocks (0–1)
     for layer in model.encoder.encoder.layer[:2]:
         for param in layer.parameters():
             param.requires_grad = False
@@ -260,7 +260,7 @@ def main():
     model.config.decoder_start_token_id = processor.tokenizer.cls_token_id
     model.config.early_stopping = True
     model.config.no_repeat_ngram_size = 3
-    model.config.length_penalty = 2.0 #  penalizes long generated sequences
+    model.config.length_penalty = 2.0  # penalizes long generated sequences
     # Sets the maximum number of tokens/characters the decoder is allowed to generate for any single output sequence. This prevents excessively long, garbage predictions.
     model.config.max_length = 64
     # Specifies the beam width (k) for beam search decoding.
@@ -279,10 +279,11 @@ def main():
 
         # ----------------------------------------------------
         eval_strategy="epoch",
-        save_strategy="epoch",
-        logging_steps=100,  # Log training metrics every 100 steps
-        load_best_model_at_end=True,  # Load the model with the best validation CER after training finishes.
-        metric_for_best_model="cer",  # Track the best model based on the 'cer' metric.
+        save_strategy="no",            # behave like run_experiments (no checkpoints)
+        logging_steps=100,
+        load_best_model_at_end=False,  # final weights, not "best" checkpoint
+        metric_for_best_model="cer",
+        report_to=[],                  # disable wandb/etc, like run_experiments
         # ----------------------------------------------------
 
         dataloader_num_workers=0,
@@ -300,22 +301,9 @@ def main():
         callbacks=[ValidationLoggerCallback()],
     )
 
-    # 5. Train
+    # 5. Train — always from scratch (like each run_experiments config)
     print("Starting training...")
-    # ==== resume if checkpoint exists ====
-    checkpoint_dir = "checkpointed_model"
-    # ensure at least one real checkpoint exists
-    has_ckpt = any(
-        name.startswith("checkpoint-")
-        for name in os.listdir(checkpoint_dir)
-    ) if os.path.isdir(checkpoint_dir) else False
-    if has_ckpt:
-        print("Resuming from last checkpoint...")
-        trainer.train(resume_from_checkpoint=True)
-    else:
-        print("No checkpoint found — training from scratch...")
-        trainer.train()
-    # ===========================================
+    trainer.train()
 
     # ----- SAVE TRAINED MODEL -----
     save_path = "saved_model"
@@ -333,7 +321,7 @@ def main():
     test_results = trainer.evaluate(eval_dataset=test_dataset, metric_key_prefix="test")
     print("Test CER:", test_results.get("test_cer"))
 
-    # ----- DELETE CHECKPOINT FOLDER SO FUTURE RUNS DON'T RESUME -----
+    # Even though save_strategy="no", this keeps behavior harmless:
     import shutil
     shutil.rmtree("checkpointed_model", ignore_errors=True)
     print("Done.")
