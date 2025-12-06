@@ -10,6 +10,23 @@ It includes:
 
 ---
 
+## Work Division
+| Week | Member        | Contribution Description                                                                                   | Hours |
+|------|----------------|-------------------------------------------------------------------------------------------------------------|-------|
+| **Week 1 – Preprocessing** | Shunqi Wang   | Explored dataset and data structure; preprocessed GNHK dataset                                     | ~8    |
+|      | Ziheng Zhou   | Data augmentation                                                                                           | ~2    |
+|      | Qi Er Teng    | Designed model architecture; explored related models                                                        | ~8    |
+|      | Ruilin Tian   | Examined possible ethical issues                                                                            | ~2    |
+| **Week 2 – Fine-tuning** | Shunqi Wang   |                                                                                                     |       |
+|      | Ziheng Zhou   | Model training, checkpointing, logging; HPO regularization; GPU management; integration management          | ~8    |
+|      | Qi Er Teng    |                                                                                                             |       |
+|      | Ruilin Tian   |                                                                                                             |       |
+| **Week 3 – Evaluation** | Shunqi Wang   |                                                                                                     |       |
+|      | Ziheng Zhou   |                                                                                                             |       |
+|      | Qi Er Teng    |                                                                                                             |       |
+|      | Ruilin Tian   | Conducted evaluations of model accuracy and robustness (~4hrs); discussed limitations (~2hrs)              | ~6    |
+
+
 ## Dataset Setup
 
 1. Download the dataset:  
