@@ -56,9 +56,9 @@ class ValidationLoggerCallback(TrainerCallback):
 
 @dataclass(frozen=True)
 class TrainingConfig:
-    BATCH_SIZE: int = 24 # Remember to adjust this batch size
-    EPOCHS: int = 1
-    LEARNING_RATE: float = 5e-5
+    BATCH_SIZE: int = 24  # Final batch size
+    EPOCHS: int = 3       # Best config: 3 epochs
+    LEARNING_RATE: float = 3e-5  # Best config: 3 × 10^{-5}
 
 
 @dataclass(frozen=True)
@@ -248,9 +248,9 @@ def main():
     model.to(device)
 
     # ======== FREEZE EARLY ENCODER LAYERS ========
-    print("total number of blocks we have", len(model.encoder.encoder.layer)) # total number of blocks we have
-    # Freeze first 3 transformer blocks (for TrOCR small: blocks 0–2)
-    for layer in model.encoder.encoder.layer[:2]:
+    print("total number of blocks we have", len(model.encoder.encoder.layer))  # total number of blocks we have
+    # Best config: freeze first 4 transformer blocks (0–3)
+    for layer in model.encoder.encoder.layer[:4]:
         for param in layer.parameters():
             param.requires_grad = False
 
@@ -260,7 +260,7 @@ def main():
     model.config.decoder_start_token_id = processor.tokenizer.cls_token_id
     model.config.early_stopping = True
     model.config.no_repeat_ngram_size = 3
-    model.config.length_penalty = 2.0 #  penalizes long generated sequences
+    model.config.length_penalty = 2.0  # penalizes long generated sequences
     # Sets the maximum number of tokens/characters the decoder is allowed to generate for any single output sequence. This prevents excessively long, garbage predictions.
     model.config.max_length = 64
     # Specifies the beam width (k) for beam search decoding.
