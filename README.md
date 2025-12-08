@@ -132,4 +132,7 @@ A perfect match gives **CER = 0**, while more mistakes increase the score.
 During fine-tuning, validation, and testing, CER reflects how close each predicted word is to its corresponding target word.  
 It is also used to compare the performance of the pretrained baseline TrOCR model with the fine-tuned version.
 
+## Acknowledgement
 
+The preprocessing pipeline and the data structures used to store cropped image–text pairs were adapted from the following repository:
+https://github.com/spmallick/learnopencv/tree/master/Handwritten_Text_Recognition_using_OCR 
